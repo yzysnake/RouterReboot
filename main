@@ -1,0 +1,36 @@
+import requests
+
+# Disable warnings (Not recommended for production)
+requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
+
+ROUTER_URL = 'https://192.168.0.1'
+LOGIN_URL = f'{ROUTER_URL}/login.php'
+RESTART_URL = f'{ROUTER_URL}/actionHandler/ajaxSet_Reset_Restore.php'  # Adjust based on what you find
+
+LOGIN_PAYLOAD = {
+    'username': 'admin',
+    'password': 'ABC123@abc'
+}
+
+RESTART_PAYLOAD = {
+    'restart': 'wifi'  # Adjust based on what you find
+}
+
+HEADERS = {
+    'User-Agent': 'Mozilla/5.0'
+}
+
+
+def login_and_restart():
+    with requests.Session() as session:
+        # Login
+        session.post(LOGIN_URL, data=LOGIN_PAYLOAD, headers=HEADERS,
+                     verify=False)  # `verify=False` ignores SSL cert verification
+
+        # Restart
+        session.post(RESTART_URL, data=RESTART_PAYLOAD, headers=HEADERS,
+                     verify=False)  # `verify=False` ignores SSL cert verification
+
+
+if __name__ == "__main__":
+    login_and_restart()
